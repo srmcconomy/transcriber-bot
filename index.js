@@ -65,8 +65,8 @@ bot.on('ready', () => {
           // console.log(`${user.username} is speaking`);
           const stream = receiver.createPCMStream(user);
           stream
-            .on('end', () => console.log(arguments))
-            .on('close', () => console.log(arguments))
+            .on('end', () => console.log('end'))
+            .on('close', () => console.log('close'))
             .pipe(new PCM())
             .pipe(speech.createRecognizeStream(request))
             .on('error', error => console.log('!!' + error))
