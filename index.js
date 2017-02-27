@@ -75,7 +75,7 @@ bot.on('ready', () => {
                 textChannel.sendMessage(`**${user.username}**: ${data.results}`);
               }
             });
-          setTimeout(() => if (stream) stream.destroy(), 60000);
+          setTimeout(() => { if (stream) stream.destroy() }, 60000);
         }
       })
     })
