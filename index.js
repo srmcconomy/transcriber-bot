@@ -69,6 +69,8 @@ bot.on('ready', () => {
             .on('close', () => console.log('close'))
             .pipe(new PCM())
             .pipe(speech.createRecognizeStream(request))
+            .on('finish', () => console.log('finish'))
+            .on('close', () => console.log('close'))
             .on('error', error => console.log('!!' + error))
             .on('data', data => {
               if (data.results.length > 0 && textChannel) {
