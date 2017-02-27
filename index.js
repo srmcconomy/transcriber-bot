@@ -63,13 +63,14 @@ bot.on('ready', () => {
       connection.on('speaking', (user, speaking) => {
         if (speaking) {
           // console.log(`${user.username} is speaking`);
+          const pcm = new PCM();
           const stream = receiver.createPCMStream(user);
           stream
-            .on('end', () => console.log('end'))
+            .on('end', () => console.log(new Date().toTimeString() + 'end'))
             .on('close', () => console.log('close'))
-            .pipe(new PCM())
+            .pipe(pcm)
             .pipe(speech.createRecognizeStream(request))
-            .on('finish', () => console.log('finish'))
+            .on('finish', () => console.log(new Date().toTimeString() + 'finish'))
             .on('close', () => console.log('close'))
             .on('error', error => console.log('!!' + error))
             .on('data', data => {
