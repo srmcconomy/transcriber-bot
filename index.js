@@ -63,16 +63,19 @@ bot.on('ready', () => {
       connection.on('speaking', (user, speaking) => {
         if (speaking) {
           // console.log(`${user.username} is speaking`);
-          receiver.createPCMStream(user)
+          const stream = receiver.createPCMStream(user);
+          stream
+            .on('end', () => console.log(arguments))
+            .on('close', () => console.log(arguments))
             .pipe(new PCM())
-            // .pipe(fs.createWriteStream('./out2.raw'))
             .pipe(speech.createRecognizeStream(request))
-            .on('error', error => console.log(error))
+            .on('error', error => console.log('!!' + error))
             .on('data', data => {
               if (data.results.length > 0 && textChannel) {
                 textChannel.sendMessage(`**${user.username}**: ${data.results}`);
               }
-            })
+            });
+          setTimeout(() => if (stream) stream.destroy(), 60000);
         }
       })
     })
