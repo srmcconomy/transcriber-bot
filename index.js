@@ -65,7 +65,7 @@ bot.on('ready', () => {
           // console.log(`${user.username} is speaking`);
           const pcm = new PCM();
           const stream = receiver.createPCMStream(user);
-          setup(stream);
+          setup(stream, textChannel);
         }
       });
     })
