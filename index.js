@@ -65,23 +65,23 @@ bot.on('ready', () => {
           // console.log(`${user.username} is speaking`);
           const pcm = new PCM();
           const stream = receiver.createPCMStream(user);
-          stream
-            .on('end', () => console.log(new Date().toTimeString() + 'end'))
-            .on('close', () => console.log('close'))
-            .pipe(pcm)
-            .pipe(speech.createRecognizeStream(request))
-            .on('finish', () => console.log(new Date().toTimeString() + 'finish'))
-            .on('close', () => console.log('close'))
-            .on('error', error => console.log('!!' + error))
-            .on('data', data => {
-              if (data.results.length > 0 && textChannel) {
-                textChannel.sendMessage(`**${user.username}**: ${data.results}`);
-              }
-            });
+          setup(stream);
         }
-      })
+      });
     })
   }
 });
+
+function setup(stream, textChannel) {
+  console.log('setup')
+  stream.pipe(speech.createRecognizeStream(request))
+    .on('close', () => setup(stream, textChannel))
+    .on('error', error => console.log('!!' + error))
+    .on('data', data => {
+      if (data.results.length > 0 && textChannel) {
+        textChannel.sendMessage(`**${user.username}**: ${data.results}`);
+      }
+    });
+}
 
 bot.login('Mjg1NTk5NjU5NTY3ODc0MDc4.C5UiQA.r4XZ8JmAvV2vr9RO4sE3K-xxwnU');
